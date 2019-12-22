@@ -1,0 +1,29 @@
+following, you would have to:
+
+1. create a rectangle
+2. inside it, generate some random shapes with random colors
+- the shapes should fall down from top to bottom
+- the generate position is outside the top of the rectangle, while the bottom position is outside the
+ bottom of the rectangle
+- falling should be controlled by gravity value
+
+the shapes should be: 3 sides (Triangle), 4 sides (Rectangle), 5 sides (Pentagon), 6 sides (Hexagon), circle or ellipse
+
+3. if you click inside the rectangle, a random shape of random color should be generated at the mouse position and start to fall
+
+4. if you click a shape, it should disappear
+
+5. the application should also be compatible with mobile devices
+
+6. in the top left area of the rectangle, there should be 2 HTML text fields:
+- first one to show the number of shapes displayed in the rectangle
+- second one to show the surface area that is occupied by the shapes
+
+7. at the bottom of the rectangle, add the following HTML controls:
+
+- increase or decrease (+/- button) the number of shapes that are generated per second (and update the text field accordingly)
+- increase or decrease (+/- button) the gravity value (and update the text field accordingly)
+
+ ***** for these you should use: PixiJS, HTML, CSS *******
+
+ ****** and also use design patterns as much as possible ******

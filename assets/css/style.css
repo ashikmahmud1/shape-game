@@ -1,0 +1,8 @@
+#game_scence{
+    margin: 0 auto;
+    background-color: aqua;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
