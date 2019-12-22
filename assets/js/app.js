@@ -23,29 +23,36 @@ document.addEventListener("DOMContentLoaded", function () {
     const mask = PIXI.Sprite.from(texture);
     mask.anchor.set(0.5);
     mask.x = 310;
-    mask.y = 190;
+    mask.y = 10;
 
     app.stage.addChild(mask);
 
-    const target = new PIXI.Point();
+    // const target = new PIXI.Point();
 
-    reset();
+    // reset();
 
-    function reset() {
-        target.x = Math.floor(Math.random() * 550);
-        target.y = Math.floor(Math.random() * 300);
-    }
+    // function reset() {
+    //     target.x = Math.floor(Math.random() * 550);
+    //     target.y = Math.floor(Math.random() * 300);
+    // }
     class GameManager {
         static start() {
             // requestAnimationFrame call is built on top of this function
             // fps will control automatically
             app.ticker.add(() => {
-                mask.x += (target.x - mask.x) * 0.1;
-                mask.y += (target.y - mask.y) * 0.1;
+                // mask.x += (target.x - mask.x) * 0.1;
+                // mask.y += (target.y - mask.y) * 0.1;
+                mask.y = mask.y + 5 ;
+                console.log('calling');
 
-                if (Math.abs(mask.x - target.x) < 1) {
-                    reset();
+                // here check the y position if it's outside the game container then reset the mask.y to 10
+                // game container height 600
+                if (mask.y > 600) {
+                    mask.y = 10
                 }
+                // if (Math.abs(mask.x - target.x) < 1) {
+                //     reset();
+                // }
             });
         }
     }
@@ -175,7 +182,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function onClickCanvas(e) {
         console.log(e.data.global.x);
-        console.log(e.data.global.y);
+        mask.x = parseInt(e.data.global.x);
+        mask.y = parseInt(e.data.global.y);
     }
     mask.on('pointerdown', onClick);
     function onClick(e) {
