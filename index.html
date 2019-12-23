@@ -11,19 +11,14 @@
 
 <body>
     <div id='game_scence'>
-        <!-- show how many shapes falling per second -->
-        <div id="number_shapes_input">
-            <input type="text" id="number_current_shapes" />
-            <input type="text" id="surface_occupied_shapes" />
-        </div>
         <!-- put the number of shapes fall per second button -->
         <div id="number_shapes">
             <div class="input-group input-number-group">
-                <div class="input-group-button">
+                <div class="input-group-button" id="inc_shapes">
                   <span class="input-number-decrement">-</span>
                 </div>
-                <input class="input-number" type="number" value="1" min="0" max="1000">
-                <div class="input-group-button">
+                <input class="input-number" type="number" id="shapes_value">
+                <div class="input-group-button" id="dec_shapes">
                   <span class="input-number-increment">+</span>
                 </div>
               </div>
@@ -31,11 +26,11 @@
         <!-- put the gravity control input button -->
         <div id="gravity_control">
             <div class="input-group input-number-group">
-                <div class="input-group-button">
+                <div class="input-group-button" id="dec_gravity">
                   <span class="input-number-decrement">-</span>
                 </div>
-                <input class="input-number" type="number" value="1" min="0" max="1000">
-                <div class="input-group-button">
+                <input class="input-number" type="number" id="gravity_value">
+                <div class="input-group-button" id="inc_gravity">
                   <span class="input-number-increment">+</span>
                 </div>
               </div>
