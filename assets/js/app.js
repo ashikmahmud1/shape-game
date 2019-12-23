@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
     class ShapeGenerator {
         constructor() {
             this.shapes = []
-            this.shapes_per_second = 0;
+            this.shapes_per_second = 5;
             this.gravity = 5;
             this.colors = [
                 '0xFF0000',
@@ -170,9 +170,28 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         update() {
             // first check if there is no shapes in the shapes array
-            // secondly check if there is 
+            if (this.shapes.length === 0 && this.shapes_per_second > 0) {
+                let initial_x_pos = 100;
+                for (let i = 0; i < this.shapes_per_second; i++) {
+                    console.log('I am generating shape')
+                    let random_shape_index = this.getRandomInt(5) // this will generate a random number 0, 1, 2, 3, 4 or 5
+                    let random_color_index = this.getRandomInt(4) // this will generate a random number 0, 1, 2, 3, 4
+                    let y_pos = -50; // firstly y position will be -100 that means the object will be outside from the game container
+                    let generated_shape = this.random_shapes[random_shape_index].generate(initial_x_pos, y_pos, this.colors[random_color_index]);
+                    // push the generated shape in the shapes array
+                    this.shapes.push(generated_shape);
+                    // render the generated shape to the game stage
+                    app.stage.addChild(this.shapes[this.shapes.length - 1]);
+                    initial_x_pos += 150
+                }
+            }
+
+            // secondly update the shapes y position
+            for (let i = 0; i < this.shapes.length; i++) {
+                this.shapes[i].y += this.gravity; // adding the gravity value
+            }
+
             let new_shapes_to_generate = 0;
-            console.log('I am calling....');
 
             // foreach shapes check the shape current position
             // if the shape y position is 600 then increment the value of new_shapes_to_generate
@@ -191,19 +210,37 @@ document.addEventListener("DOMContentLoaded", function () {
             //     rectangle_texture.y = 10
             // }
         }
+        getRandomInt(max) {
+            return Math.floor(Math.random() * Math.floor(max));
+        }
         initializeButtonsListener() {
             let inc_shapes_button = document.getElementById("inc_shapes");
             let dec_shapes_button = document.getElementById("dec_shapes");
             let shapes_input = document.getElementById("shapes_value");
             shapes_input.value = this.shapes_per_second;
 
-            let inc_gravity = document.getElementById("inc_gravity");
-            let dec_gravity = document.getElementById("dec_gravity");
+            let inc_gravity_button = document.getElementById("inc_gravity");
+            let dec_gravity_button = document.getElementById("dec_gravity");
             let gravity_input = document.getElementById("gravity_value");
             gravity_input.value = this.gravity;
 
-            inc_shapes_button.addEventListener('click touchstart',()=>{this.shapes++});
-            dec_shapes_button.addEventListener('click touchstart',() => {if(this.shapes > 0) this.shapes--})
+            let _self = this;
+            inc_shapes_button.addEventListener('click', function () {
+                _self.shapes_per_second++;
+                shapes_input.value = _self.shapes_per_second;
+            });
+            dec_shapes_button.addEventListener('click', function () {
+                if (_self.shapes_per_second > 0) _self.shapes_per_second--
+                shapes_input.value = _self.shapes_per_second;
+            });
+            inc_gravity_button.addEventListener('click', function () {
+                _self.gravity++
+                gravity_input.value = _self.gravity;
+            });
+            dec_gravity_button.addEventListener('click', function () {
+                if (_self.gravity > 1) _self.gravity--
+                gravity_input.value = _self.gravity;
+            })
         }
         onClickCanvas(e) {
             // firstly loop through the shapes object and check if clicked inside a shape object
@@ -216,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let y = parseInt(e.data.global.y);
         }
     }
-    // GameManager.start();
+    GameManager.start();
 
     // // Rectangle + line style 1
     // graphics.lineStyle(2, 0xFEEB77, 1);
