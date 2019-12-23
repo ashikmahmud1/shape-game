@@ -3,8 +3,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // antialias property makes the graphics property smooth
     // creating a new 
-    const app = new PIXI.Application({ antialias: true });
+    const app = new PIXI.Application({ antialias: true, backgroundColor: 0xFFFFFF });
+
     document.getElementById('game_scence').appendChild(app.view);
+
     let colors = [
         '0xFF0000',
         '0x00FF00',
@@ -13,19 +15,81 @@ document.addEventListener("DOMContentLoaded", function () {
         '0x00FFFF'
     ];
 
-    const graphics = new PIXI.Graphics();
+    // we will generate shape using this PIX graphics instance.
+    //****************** Start Rectangle *************************
+    const rectangle = new PIXI.Graphics();
+    rectangle.beginFill(0xDE3249);
+    rectangle.drawRect(50, -100, 100, 100);
+    rectangle.endFill();
+    const texture_for_rectangle = app.renderer.generateTexture(rectangle);
+    const rectangle_texture = PIXI.Sprite.from(texture_for_rectangle);
+    rectangle_texture.anchor.set(0.5);
+    rectangle_texture.x = 100;
+    rectangle_texture.y = 10;
 
-    // Rectangle
-    graphics.beginFill(0xDE3249);
-    graphics.drawRect(50, -100, 100, 100);
-    graphics.endFill();
-    const texture = app.renderer.generateTexture(graphics);
-    const mask = PIXI.Sprite.from(texture);
-    mask.anchor.set(0.5);
-    mask.x = 310;
-    mask.y = 10;
+    //******************End Rectangle *************************
 
-    app.stage.addChild(mask);
+    //****************** Start Hexagon *************************
+    const hexagon = new PIXI.Graphics();
+    hexagon.beginFill(0xDE3249);
+    let hexagonRadius = 60;
+    let hexagonHeight = hexagonRadius * Math.sqrt(3);
+    hexagon.drawPolygon([
+        -hexagonRadius, 0,
+        -hexagonRadius / 2, hexagonHeight / 2,
+        hexagonRadius / 2, hexagonHeight / 2,
+        hexagonRadius, 0,
+        hexagonRadius / 2, -hexagonHeight / 2,
+        -hexagonRadius / 2, -hexagonHeight / 2,
+        // -64, 128,             //First point
+        // 64, 128,              //Second point
+        // 0, 0 
+    ])
+    hexagon.endFill();
+    const texture_for_hexagon = app.renderer.generateTexture(hexagon);
+    const hexagon_texture = PIXI.Sprite.from(texture_for_hexagon);
+    hexagon_texture.anchor.set(0.5);
+    hexagon_texture.x = 300;
+    hexagon_texture.y = 10;
+
+    //******************End Hexagon *************************
+
+    //******************Start Circle *************************
+    const circle = new PIXI.Graphics();
+    circle.lineStyle(0); // draw a circle, set the lineStyle to zero so the circle doesn't have an outline
+    circle.beginFill(0xDE3249, 1);
+    circle.drawCircle(100, 250, 50);
+    circle.endFill();
+    const texture_for_circle = app.renderer.generateTexture(circle);
+    const circle_texture = PIXI.Sprite.from(texture_for_circle);
+    circle_texture.anchor.set(0.5);
+    circle_texture.x = 500;
+    circle_texture.y = 10;
+    //******************End Circle *************************
+
+    //******************Start Triangle *************************
+    const triangle = new PIXI.Graphics();
+    let triangleWidth = 100,
+        triangleHeight = triangleWidth,
+        triangleHalfway = triangleWidth / 2;
+
+    triangle.beginFill(0xFF0000, 1);
+    triangle.lineStyle(0, 0xFF0000, 1);
+    triangle.moveTo(triangleWidth, 0);
+    triangle.lineTo(triangleHalfway, triangleHeight);
+    triangle.lineTo(0, 0);
+    triangle.lineTo(triangleHalfway, 0);
+    triangle.endFill();
+    const texture_for_triangle = app.renderer.generateTexture(triangle);
+    const triangle_texture = PIXI.Sprite.from(texture_for_triangle);
+    triangle_texture.anchor.set(0.5);
+    triangle_texture.x = 700;
+    triangle_texture.y = 10;
+
+    //******************End Triangle *************************
+
+
+    app.stage.addChild(rectangle_texture, hexagon_texture, circle_texture, triangle_texture);
 
     // const target = new PIXI.Point();
 
@@ -37,18 +101,21 @@ document.addEventListener("DOMContentLoaded", function () {
     // }
     class GameManager {
         static start() {
+
+            // create a new shape generator object instance
+
             // requestAnimationFrame call is built on top of this function
             // fps will control automatically
             app.ticker.add(() => {
                 // mask.x += (target.x - mask.x) * 0.1;
                 // mask.y += (target.y - mask.y) * 0.1;
-                mask.y = mask.y + 5 ;
+                rectangle_texture.y = rectangle_texture.y + 5;
                 console.log('calling');
 
                 // here check the y position if it's outside the game container then reset the mask.y to 10
                 // game container height 600
-                if (mask.y > 600) {
-                    mask.y = 10
+                if (rectangle_texture.y > 600) {
+                    rectangle_texture.y = 10
                 }
                 // if (Math.abs(mask.x - target.x) < 1) {
                 //     reset();
@@ -57,35 +124,80 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // ShapeGenerator class responsibility is to generate new shapes and render to the stage.
-    class ShapeGenerator {
-        constructor() {
-            this.shapes = []
-        }
-        static update() {
-            console.log('I am calling....');
-        }
-    }
 
     // can generate on click position or default position
     // track the object position
     // if the object is almost on the bottom of the game container then fall a new object
     // if the falling container goes outisde the bottom then remove that object from the game stage
     class Circle {
+
+        static generate(xPos, yPos, color) {
+
+        }
     }
     class Ellipse {
+        static generate(xPos, yPos, color) {
+
+        }
     }
     class Triangle {
+        static generate(xPos, yPos, color) {
+
+        }
     }
     class Rectangle {
+        static generate(xPos, yPos, color) {
+
+        }
     }
     class Pentagon {
+        static generate(xPos, yPos, color) {
+
+        }
     }
     class Hexagon {
+        static generate(xPos, yPos, color) {
+
+        }
+        // var hexagonRadius = 60;
+        // var hexagonHeight = hexagonRadius * Math.sqrt(3);
+        // bunny.drawPolygon([
+        //     -hexagonRadius, 0,
+        //     -hexagonRadius/2, hexagonHeight/2,
+        //     hexagonRadius/2, hexagonHeight/2,
+        //     hexagonRadius, 0,
+        //     hexagonRadius/2, -hexagonHeight/2,
+        //     -hexagonRadius/2, -hexagonHeight/2,
+        //       // -64, 128,             //First point
+        //       // 64, 128,              //Second point
+        //       // 0, 0 
+        //   ])
+    }
+
+    // ShapeGenerator class responsibility is to generate new shapes and render to the stage.
+    class ShapeGenerator {
+        constructor() {
+            this.shapes = []
+            this.shapes_per_second = 0;
+            this.gravity = 5;
+            this.random_shapes = [Circle, Ellipse, Triangle, Rectangle, Pentagon, Hexagon];
+        }
+        static update() {
+            let new_shapes_to_generate = 0;
+            console.log('I am calling....');
+
+            // foreach shapes check the shape current position
+            // if the shape y position is 600 then increment the value of new_shapes_to_generate
+
+            // for generating random shape. generate a number between 0-5
+            // this.random_shapes [generated_random_shape_index]
+            // now randomly select a color from the colors array
+            // 
+        }
     }
 
 
-    GameManager.start();
+    // GameManager.start();
 
     // // Rectangle + line style 1
     // graphics.lineStyle(2, 0xFEEB77, 1);
@@ -171,8 +283,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // graphics.drawPolygon(path);
     // graphics.endFill();
 
-    mask.interactive = true;
-    mask.buttonMode = true;
+    rectangle_texture.interactive = true;
+    rectangle_texture.buttonMode = true;
 
 
     // ********* pointerup event has event bubbling bug **********
@@ -182,13 +294,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function onClickCanvas(e) {
         console.log(e.data.global.x);
-        mask.x = parseInt(e.data.global.x);
-        mask.y = parseInt(e.data.global.y);
+        rectangle_texture.x = parseInt(e.data.global.x);
+        rectangle_texture.y = parseInt(e.data.global.y);
     }
-    mask.on('pointerdown', onClick);
+    rectangle_texture.on('pointerdown', onClick);
     function onClick(e) {
         console.log(e)
         e.stopPropagation();
-        app.stage.removeChild(mask)
+        app.stage.removeChild(rectangle_texture)
     }
 })

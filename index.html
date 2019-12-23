@@ -8,17 +8,38 @@
     <title>Shape Game</title>
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
 </head>
+
 <body>
-    <div id='game_scence'></div>
-    <!-- put the number of shapes fall per second button -->
-    <div id="number_of_shapes">
-        <button type="button" id="inc_number_of_shapes">+</button>
-        <button type="button" id="dec_number_of_shapes">-</button>
-    </div>
-    <!-- put the gravity control input button -->
-    <div id="gravity_control">
-        <button type="button" id="inc_gravity">+</button>
-        <button type="button" id="dec_gravity">-</button>
+    <div id='game_scence'>
+        <!-- show how many shapes falling per second -->
+        <div id="number_shapes_input">
+            <input type="text" id="number_current_shapes" />
+            <input type="text" id="surface_occupied_shapes" />
+        </div>
+        <!-- put the number of shapes fall per second button -->
+        <div id="number_shapes">
+            <div class="input-group input-number-group">
+                <div class="input-group-button">
+                  <span class="input-number-decrement">-</span>
+                </div>
+                <input class="input-number" type="number" value="1" min="0" max="1000">
+                <div class="input-group-button">
+                  <span class="input-number-increment">+</span>
+                </div>
+              </div>
+        </div>
+        <!-- put the gravity control input button -->
+        <div id="gravity_control">
+            <div class="input-group input-number-group">
+                <div class="input-group-button">
+                  <span class="input-number-decrement">-</span>
+                </div>
+                <input class="input-number" type="number" value="1" min="0" max="1000">
+                <div class="input-group-button">
+                  <span class="input-number-increment">+</span>
+                </div>
+              </div>
+        </div>
     </div>
     <script src="assets/js/pixi.min.js"></script>
     <script src="assets/js/app.js"></script>
