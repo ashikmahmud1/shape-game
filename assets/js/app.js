@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // antialias property makes the graphics property smooth
     const app = new PIXI.Application({ antialias: true, backgroundColor: 0xFFFFFF });
-
     document.getElementById('game_scence').appendChild(app.view);
 
     class GameManager {
@@ -102,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     class Pentagon {
         static generate(xPos, yPos, color) {
-            // TODO
+
             const pentagon = new PIXI.Graphics();
             pentagon.beginFill(color);
             pentagon.drawPolygon(
@@ -155,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
     class ShapeGenerator {
         constructor() {
             this.shapes = []
-            this.shapes_per_second = 5;
+            this.shapes_per_second = 0;
             this.gravity = 5;
             this.colors = [
                 '0xFF0000',
@@ -164,26 +163,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 '0xFF00FF',
                 '0x00FFFF'
             ];
-            app.renderer.plugins.interaction.on('pointerup', this.onClickCanvas);
+            let _self = this;
+            app.renderer.plugins.interaction.on('pointerup', function (e) {
+                // firstly loop through the shapes object and check if clicked inside a shape object
+                // if clicked inside the shape object then get the index of the shape object
+                // remove that shape object from the stage
+                // also remove that shapes object from the shapes array
+                // else clicked outside the shape object but inside the game canvas
+                // generate a shape object in the clicked position x and y
+                let x = parseInt(e.data.global.x);
+                let y = parseInt(e.data.global.y);
+                _self.generate(1, x, y);
+            });
             this.initializeButtonsListener();
             this.random_shapes = [Circle, Ellipse, Triangle, Rectangle, Pentagon, Hexagon];
         }
         update() {
             // first check if there is no shapes in the shapes array
             if (this.shapes.length === 0 && this.shapes_per_second > 0) {
-                let initial_x_pos = 100;
-                for (let i = 0; i < this.shapes_per_second; i++) {
-                    console.log('I am generating shape')
-                    let random_shape_index = this.getRandomInt(5) // this will generate a random number 0, 1, 2, 3, 4 or 5
-                    let random_color_index = this.getRandomInt(4) // this will generate a random number 0, 1, 2, 3, 4
-                    let y_pos = -50; // firstly y position will be -100 that means the object will be outside from the game container
-                    let generated_shape = this.random_shapes[random_shape_index].generate(initial_x_pos, y_pos, this.colors[random_color_index]);
-                    // push the generated shape in the shapes array
-                    this.shapes.push(generated_shape);
-                    // render the generated shape to the game stage
-                    app.stage.addChild(this.shapes[this.shapes.length - 1]);
-                    initial_x_pos += 150
-                }
+                this.generate(this.shapes_per_second);
+            }
+            let new_shapes_to_generate = 0;
+            if (this.shapes_per_second > this.shapes.length) {
+                new_shapes_to_generate = this.shapes_per_second - this.shapes.length;
+                this.generate(new_shapes_to_generate);
             }
 
             // secondly update the shapes y position
@@ -191,33 +194,48 @@ document.addEventListener("DOMContentLoaded", function () {
                 this.shapes[i].y += this.gravity; // adding the gravity value
             }
 
-            let new_shapes_to_generate = 0;
+            new_shapes_to_generate = 0;
+            for (let i = 0; i < this.shapes.length; i++) {
+                // foreach shapes check the shape current position
+                // if the shape y position is 610 then increment the value of new_shapes_to_generate
+                if (this.shapes[i].y > 610) {
+                    new_shapes_to_generate++;
+                    // remove the shape from the stage
+                    app.stage.removeChild(this.shapes[i]);
+                    // finally remove the shape from the shape array
+                    this.shapes.splice(i, 1);
+                }
+            }
+            this.generate(new_shapes_to_generate);
 
-            // foreach shapes check the shape current position
-            // if the shape y position is 600 then increment the value of new_shapes_to_generate
-
+        }
+        generate(shapes_to_generate, x_pos = 0, y_pos = -50) {
             // for generating random shape. generate a number between 0-5
             // this.random_shapes [generated_random_shape_index]
             // now randomly select a color from the colors array
-            // 
-            // mask.x += (target.x - mask.x) * 0.1;
-            // mask.y += (target.y - mask.y) * 0.1;
-            // rectangle_texture.y = rectangle_texture.y + 5;
-
-            // here check the y position if it's outside the game container then reset the mask.y to 10
-            // game container height 600
-            // if (rectangle_texture.y > 600) {
-            //     rectangle_texture.y = 10
-            // }
+            for (let i = 0; i < shapes_to_generate; i++) {
+                console.log('I am generating shape')
+                let random_shape_index = this.getRandomInt(5) // this will generate a random number 0, 1, 2, 3, 4 or 5
+                let random_color_index = this.getRandomInt(4) // this will generate a random number 0, 1, 2, 3, 4
+                x_pos = x_pos === 0 ? this.getRandomInt(800) : x_pos;
+                y_pos = y_pos === -50 ? -50 : y_pos; // firstly y position will be -100 that means the object will be outside from the game container
+                let generated_shape = this.random_shapes[random_shape_index].generate(x_pos, y_pos, this.colors[random_color_index]);
+                // push the generated shape in the shapes array
+                this.shapes.push(generated_shape);
+                // render the generated shape to the game stage
+                app.stage.addChild(this.shapes[this.shapes.length - 1]);
+            }
         }
         getRandomInt(max) {
             return Math.floor(Math.random() * Math.floor(max));
         }
         initializeButtonsListener() {
+            let number_current_shapes = document.getElementById("number_current_shapes");
             let inc_shapes_button = document.getElementById("inc_shapes");
             let dec_shapes_button = document.getElementById("dec_shapes");
             let shapes_input = document.getElementById("shapes_value");
             shapes_input.value = this.shapes_per_second;
+            number_current_shapes.value = this.shapes_per_second;
 
             let inc_gravity_button = document.getElementById("inc_gravity");
             let dec_gravity_button = document.getElementById("dec_gravity");
@@ -228,10 +246,12 @@ document.addEventListener("DOMContentLoaded", function () {
             inc_shapes_button.addEventListener('click', function () {
                 _self.shapes_per_second++;
                 shapes_input.value = _self.shapes_per_second;
+                number_current_shapes.value = _self.shapes_per_second;
             });
             dec_shapes_button.addEventListener('click', function () {
                 if (_self.shapes_per_second > 0) _self.shapes_per_second--
                 shapes_input.value = _self.shapes_per_second;
+                number_current_shapes.value = _self.shapes_per_second;
             });
             inc_gravity_button.addEventListener('click', function () {
                 _self.gravity++
@@ -242,19 +262,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 gravity_input.value = _self.gravity;
             })
         }
-        onClickCanvas(e) {
-            // firstly loop through the shapes object and check if clicked inside a shape object
-            // if clicked inside the shape object then get the index of the shape object
-            // remove that shape object from the stage
-            // also remove that shapes object from the shapes array
-            // else clicked outside the shape object but inside the game canvas
-            // generate a shape object in the clicked position x and y
-            let x = parseInt(e.data.global.x);
-            let y = parseInt(e.data.global.y);
-        }
     }
     GameManager.start();
-
-    // // Rectangle + line style 1
-    // graphics.lineStyle(2, 0xFEEB77, 1);
 })
