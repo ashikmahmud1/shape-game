@@ -8,27 +8,37 @@
     height: 100vh;
 }
 
+#app{
+  width: 800px;
+  height: 600px;
+  position: relative;
+}
 #number_shapes{
     position: absolute;
-    top: 84%;
-    left: 35%;
-    /* bring your own prefixes */
-    transform: translate(-50%, -50%);
+    bottom: -50px;
+    left: 0;
 }
 #gravity_control{
     position: absolute;
-    top: 84%;
-    left: 65%;
-    /* bring your own prefixes */
-    transform: translate(-50%, -50%);
+    bottom: -50px;
+    right: 0;
+
 }
 
 #number_shapes_input {
     position: absolute;
-    top: 18%;
-    left: 32.8%;
-    /* bring your own prefixes */
-    transform: translate(-50%, -50%);
+    top: -50px;
+    left: 0;
+}
+
+#number_current_shapes{
+  height: 40px;
+  width: 200px;
+}
+
+#surface_occupied_shapes{
+  height: 40px;
+  width: 200px;
 }
 
 
@@ -53,7 +63,6 @@
   .input-number-group .input-number {
     width: 80px;
     padding: 0 12px;
-    vertical-align: top;
     text-align: center;
     outline: none;
     display: block;

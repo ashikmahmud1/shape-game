@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // antialias property makes the graphics property smooth
     const app = new PIXI.Application({ antialias: true, backgroundColor: 0xFFFFFF });
-    document.getElementById('game_scence').appendChild(app.view);
+    document.getElementById('app').appendChild(app.view);
 
     class GameManager {
         static start() {
@@ -246,12 +246,12 @@ document.addEventListener("DOMContentLoaded", function () {
             inc_shapes_button.addEventListener('click', function () {
                 _self.shapes_per_second++;
                 shapes_input.value = _self.shapes_per_second;
-                number_current_shapes.value = _self.shapes_per_second;
+                number_current_shapes.value = 'Number of current shapes - '+_self.shapes_per_second;
             });
             dec_shapes_button.addEventListener('click', function () {
                 if (_self.shapes_per_second > 0) _self.shapes_per_second--
                 shapes_input.value = _self.shapes_per_second;
-                number_current_shapes.value = _self.shapes_per_second;
+                number_current_shapes.value = 'Number of current shapes - '+_self.shapes_per_second;
             });
             inc_gravity_button.addEventListener('click', function () {
                 _self.gravity++
