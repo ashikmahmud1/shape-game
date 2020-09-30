@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function () {
             for (let i = 0; i < shapes_to_generate; i++) {
                 let random_shape_index = this.getRandomInt(5) // this will generate a random number 0, 1, 2, 3, 4 or 5
                 let random_color_index = this.getRandomInt(4) // this will generate a random number 0, 1, 2, 3, 4
-                x_pos = x_pos === 0 ? this.getRandomInt(750) : x_pos;
+                x_pos = x_pos === 0 ? this.getRandomInt(800) : x_pos;
                 y_pos = y_pos === -50 ? -50 : y_pos; // firstly y position will be -100 that means the object will be outside from the game container
                 let generated_shape = this.random_shapes[random_shape_index].generate(x_pos, y_pos, this.colors[random_color_index]);
                 // push the generated shape in the shapes array
