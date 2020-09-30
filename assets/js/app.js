@@ -183,10 +183,25 @@ document.addEventListener("DOMContentLoaded", function () {
             if (this.shapes.length === 0 && this.shapes_per_second > 0) {
                 this.generate(this.shapes_per_second);
             }
+            if(this.shapes_per_second === 0) {
+                //clear all the shapes from the current game stage
+                for (let i = 0; i < this.shapes.length; i++) {
+                    app.stage.removeChild(this.shapes[i]);
+                }
+            }
             let new_shapes_to_generate = 0;
+            // if shapes per second value is greater than the shapes array then 
+            // generate new shapes 
             if (this.shapes_per_second > this.shapes.length) {
                 new_shapes_to_generate = this.shapes_per_second - this.shapes.length;
                 this.generate(new_shapes_to_generate);
+            }
+
+            // if shapes per second value is less than the shapes array then
+            // remove the first shape from the shapes array
+            if(this.shapes_per_second < this.shapes.length){
+                app.stage.removeChild(this.shapes[0]);
+                this.shapes.splice(0, 1)
             }
 
             // secondly update the shapes y position
@@ -214,10 +229,9 @@ document.addEventListener("DOMContentLoaded", function () {
             // this.random_shapes [generated_random_shape_index]
             // now randomly select a color from the colors array
             for (let i = 0; i < shapes_to_generate; i++) {
-                console.log('I am generating shape')
                 let random_shape_index = this.getRandomInt(5) // this will generate a random number 0, 1, 2, 3, 4 or 5
                 let random_color_index = this.getRandomInt(4) // this will generate a random number 0, 1, 2, 3, 4
-                x_pos = x_pos === 0 ? this.getRandomInt(800) : x_pos;
+                x_pos = x_pos === 0 ? this.getRandomInt(750) : x_pos;
                 y_pos = y_pos === -50 ? -50 : y_pos; // firstly y position will be -100 that means the object will be outside from the game container
                 let generated_shape = this.random_shapes[random_shape_index].generate(x_pos, y_pos, this.colors[random_color_index]);
                 // push the generated shape in the shapes array
